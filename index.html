@@ -4,52 +4,407 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Dot &amp; Done · Weigh your to-dos</title>
-<meta name="description" content="A to-do list you can feel. Big tasks sink, small ones bounce, and every finished day becomes a print.">
+<meta name="description" content="A to-do list you can feel. Big tasks sink, small ones bounce, and every finished day becomes a riso print. No account, no ads, no tracking.">
+<meta property="og:title" content="Dot & Done · Weigh your to-dos">
+<meta property="og:description" content="A to-do list you can feel. Big tasks sink, small ones bounce, and every finished day becomes a print.">
+<meta property="og:image" content="assets/screens/1-weight.jpg">
+<meta name="theme-color" content="#F2EDE3">
 <link rel="icon" href="assets/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap">
 <style>
-  :root{--paper:#F2EDE3;--ink:#141414;--muted:#5E584F;--work:#6C93FF;--home:#FFD23F;--self:#FF6FA0;--errands:#3FD6A0}
-  *{box-sizing:border-box}
-  html,body{min-height:100%}
-  body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.6 Archivo,"Helvetica Neue",Arial,sans-serif;overflow-x:hidden}
-  main{position:relative;max-width:760px;margin:0 auto;padding:48px 20px 64px;min-height:100vh;display:flex;flex-direction:column}
-  .icon{width:96px;height:96px;border-radius:22px;box-shadow:6px 6px 0 var(--ink)}
-  h1{font-family:"Archivo Black","Arial Black",sans-serif;font-weight:400;font-size:clamp(56px,15vw,120px);line-height:.88;letter-spacing:-.02em;margin:36px 0 18px}
-  .tag{font-family:"Space Mono",monospace;font-weight:700;font-size:15px;letter-spacing:.08em;margin:0 0 24px}
-  .lede{font-size:20px;max-width:30ch;margin:0 0 28px}
-  .points{list-style:none;margin:0 0 36px;padding:0;display:flex;flex-direction:column;gap:10px;font-size:17px}
-  .points li{display:flex;gap:12px;align-items:center}
-  .points i{width:16px;height:16px;border-radius:50%;flex-shrink:0;display:block}
-  .soon{align-self:flex-start;font-family:"Space Mono",monospace;font-weight:700;font-size:13px;letter-spacing:.06em;background:var(--ink);color:var(--paper);padding:10px 14px;transform:rotate(-2deg)}
-  footer{margin-top:auto;padding-top:48px;display:flex;flex-wrap:wrap;gap:8px 20px;font-family:"Space Mono",monospace;font-size:12px;color:var(--muted)}
-  footer a{color:var(--ink);text-decoration-thickness:2px;text-underline-offset:3px}
-  .blob{position:fixed;border-radius:50%;mix-blend-mode:multiply;pointer-events:none;z-index:-1}
-  .b1{width:46vmax;height:46vmax;right:-14vmax;bottom:-16vmax;background:var(--work)}
-  .b2{width:22vmax;height:22vmax;right:20vmax;bottom:-6vmax;background:var(--home)}
-  .b3{width:12vmax;height:12vmax;right:6vmax;top:10vh;background:var(--self)}
-  @media (max-width:600px){.b1{opacity:.55}.b2{opacity:.6}}
+/* Riso print: paper ground, four spot inks, black. Archivo Black display, Archivo body, Space Mono labels. */
+:root{
+  --paper:#F2EDE3; --paper-2:#FBF8F2; --ink:#141414; --muted:#5E584F;
+  --work:#6C93FF; --home:#FFD23F; --self:#FF6FA0; --errands:#3FD6A0;
+  --display:"Archivo Black","Arial Black",Impact,sans-serif;
+  --body:Archivo,"Helvetica Neue",Arial,sans-serif;
+  --mono:"Space Mono",ui-monospace,Menlo,Consolas,monospace;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.6 var(--body);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{color:var(--ink);text-decoration-thickness:2px;text-underline-offset:3px}
+:focus-visible{outline:3px solid var(--self);outline-offset:3px}
+.wrap{max-width:1160px;margin:0 auto;padding-left:max(20px,env(safe-area-inset-left));padding-right:max(20px,env(safe-area-inset-right))}
+.kicker{font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin:0}
+h1,h2,h3{font-family:var(--display);font-weight:400;margin:0;text-wrap:balance}
+
+/* nav */
+nav{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:18px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-family:var(--mono);font-weight:700;font-size:14px;letter-spacing:.08em}
+.brand img{width:36px;height:36px;border-radius:9px}
+.navlinks{display:flex;gap:22px;font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:.04em}
+.navlinks a{text-decoration:none}
+.navlinks a:hover{text-decoration:underline}
+@media (max-width:640px){.navlinks .hide-sm{display:none}}
+
+/* hero */
+.hero{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:48px;align-items:center;padding-block:32px 72px}
+.hero h1{font-size:clamp(64px,10vw,132px);line-height:.86;letter-spacing:-.02em;margin:18px 0 20px}
+.hero .sub{font-family:var(--display);font-size:clamp(22px,2.6vw,30px);line-height:1.1;margin:0 0 18px}
+.hero p.lede{font-size:19px;max-width:32ch;margin:0 0 28px}
+.ctas{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:10px;min-height:52px;padding:0 20px;border:2px solid var(--ink);font-family:var(--mono);font-weight:700;font-size:14px;letter-spacing:.04em;text-decoration:none;background:transparent;cursor:pointer;color:var(--ink)}
+.btn.primary{background:var(--ink);color:var(--paper);box-shadow:5px 5px 0 var(--self)}
+.btn.primary small{font-weight:400;opacity:.75}
+.btn:hover{transform:translate(-1px,-1px)}
+.badge{font-family:var(--mono);font-size:12px;color:var(--muted);margin:14px 0 0}
+
+/* live demo */
+.demo{position:relative;border:2px solid var(--ink);background:var(--paper-2);box-shadow:10px 10px 0 var(--work);aspect-ratio:4/5;max-height:640px;width:100%;overflow:hidden}
+.demo canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
+.demo .count{position:absolute;left:14px;top:4px;font-family:var(--display);font-size:clamp(110px,14vw,170px);line-height:.85;color:var(--work);mix-blend-mode:multiply;pointer-events:none;user-select:none;transition:transform .3s}
+.demo .count.bump{animation:bump .5s cubic-bezier(.3,1.6,.5,1)}
+@keyframes bump{0%{transform:scale(1.12) rotate(-2deg)}100%{transform:none}}
+.demo .hint{position:absolute;right:12px;top:12px;font-family:var(--mono);font-size:11px;font-weight:700;background:var(--ink);color:var(--paper);padding:5px 9px;transform:rotate(-2deg);pointer-events:none}
+.demo .add{position:absolute;right:12px;top:46px;min-height:44px;padding:0 14px;border:2px solid var(--ink);background:var(--paper);font-family:var(--mono);font-weight:700;font-size:12px;cursor:pointer}
+.demo .pop{position:absolute;padding:4px 12px 0;background:var(--self);box-shadow:4px 3px 0 var(--ink);font-family:var(--display);font-size:34px;line-height:1;pointer-events:none;transform:translate(-50%,-50%) rotate(-8deg);opacity:0}
+.demo .pop.go{animation:stamp .85s ease-out forwards}
+@keyframes stamp{0%{transform:translate(-50%,-50%) rotate(-8deg) scale(.3);opacity:0}20%{transform:translate(-50%,-50%) rotate(-8deg) scale(1.1);opacity:1}75%{opacity:1}100%{transform:translate(-50%,-80%) rotate(-8deg);opacity:0}}
+@media (max-width:860px){.hero{grid-template-columns:minmax(0,1fr);gap:36px}.demo{aspect-ratio:1/1.05;max-width:520px}}
+
+/* sections */
+section.band{padding-block:88px}
+.band-head{display:flex;flex-direction:column;gap:14px;margin-bottom:44px;max-width:640px}
+.band-head h2{font-size:clamp(38px,5.4vw,64px);line-height:.95}
+.band-head p{margin:0;font-size:18px}
+.rule{border:0;border-top:2px dashed var(--ink);margin:0}
+
+/* how it works */
+.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+.step{border:2px solid var(--ink);background:var(--paper-2);padding:24px;display:flex;flex-direction:column;gap:12px}
+.step .num{font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.08em}
+.step h3{font-size:26px;line-height:1.05}
+.step p{margin:0;font-size:16px}
+@media (max-width:860px){.steps{grid-template-columns:minmax(0,1fr)}}
+.ill{position:relative;height:190px;margin:-4px -4px 6px;overflow:hidden}
+.ill *{position:absolute;display:block}
+.floor{left:0;right:0;bottom:18px;height:4px;background:var(--ink)}
+.floor::after{content:"";position:absolute;left:0;right:0;top:4px;height:14px;background-image:radial-gradient(circle,var(--ink) 1.2px,transparent 1.6px);background-size:6px 6px;opacity:.5}
+.wd{border-radius:50%;bottom:22px;transform-origin:50% 100%}
+.wd-h{left:8%;width:96px;height:96px;background:var(--work);box-shadow:5px 4px 0 var(--self);animation:wH 3.4s cubic-bezier(.5,0,.7,1) infinite}
+.wd-m{left:46%;width:62px;height:62px;background:var(--home);box-shadow:4px 3px 0 var(--work);animation:wM 3.4s .35s infinite}
+.wd-l{left:76%;width:38px;height:38px;background:var(--self);box-shadow:3px 2px 0 var(--home);animation:wL 3.4s .7s infinite}
+@keyframes wH{0%{transform:translateY(-220px)}22%{transform:translateY(0) scale(1.12,.86)}30%{transform:translateY(-5px) scale(1)}36%,100%{transform:none}}
+@keyframes wM{0%{transform:translateY(-220px)}24%{transform:translateY(0) scale(1.06,.92)}34%{transform:translateY(-30px)}44%,100%{transform:none}}
+@keyframes wL{0%{transform:translateY(-220px)}24%{transform:translateY(0)}34%{transform:translateY(-60px)}44%{transform:none}50%{transform:translateY(-18px)}56%,100%{transform:none}}
+.ink-dot{left:calc(50% - 42px);top:8px;width:84px;height:84px;border-radius:50%;display:flex;align-items:center;justify-content:center;text-align:center;font:700 10px/1.15 var(--body);border:2px dashed var(--ink);animation:inkFill 3.6s infinite}
+.ink-input{left:0;right:0;top:112px;height:40px;background:var(--ink);display:flex;align-items:center;padding:0 12px}
+.ink-typed{position:static!important;font-family:var(--mono);font-size:13px;color:var(--paper);white-space:nowrap;overflow:hidden;width:0;border-right:2px solid var(--paper);animation:inkType 3.6s steps(12) infinite}
+.ink-sw{left:0;right:0;top:162px;display:flex;gap:8px;justify-content:center}
+.ink-sw i{position:static!important;width:18px;height:18px;border-radius:50%;opacity:.35}
+.ink-sw i:first-child{animation:inkSw 3.6s infinite}
+@keyframes inkType{0%{width:0}35%,100%{width:12ch}}
+@keyframes inkFill{0%,38%{background:transparent;border-color:var(--ink);box-shadow:none}46%,100%{background:var(--work);border-color:var(--work);box-shadow:4px 3px 0 var(--home)}}
+@keyframes inkSw{0%,40%{opacity:.35;transform:none}48%,100%{opacity:1;transform:scale(1.25)}}
+.hold-ring{left:calc(50% - 70px);top:10px;width:140px;height:140px;transform:rotate(-90deg)}
+.hold-ring circle{fill:none;stroke:var(--ink);stroke-width:5;stroke-linecap:round;stroke-dasharray:396;stroke-dashoffset:396;animation:ring 3.2s infinite}
+.hold-dot{left:calc(50% - 52px);top:28px;width:104px;height:104px;border-radius:50%;background:var(--self);box-shadow:5px 4px 0 var(--home);display:flex;align-items:center;justify-content:center;text-align:center;font:700 13px/1.1 var(--body);animation:holdDot 3.2s infinite}
+.hold-pop{z-index:2;left:50%;top:58px;padding:4px 12px 0;background:var(--self);box-shadow:4px 3px 0 var(--ink);font-family:var(--display);font-size:30px;line-height:1;opacity:0;transform:translateX(-50%) rotate(-8deg);animation:holdPop 3.2s infinite}
+@keyframes ring{0%,10%{stroke-dashoffset:396}55%{stroke-dashoffset:0;opacity:1}60%,100%{stroke-dashoffset:0;opacity:0}}
+@keyframes holdDot{0%,55%{transform:scale(1);opacity:1}60%{transform:scale(1.15);opacity:0}92%{transform:scale(.6);opacity:0}100%{transform:scale(1);opacity:1}}
+@keyframes holdPop{0%,56%{opacity:0;transform:translateX(-50%) rotate(-8deg) scale(.3)}62%{opacity:1;transform:translateX(-50%) rotate(-8deg) scale(1.1)}66%,82%{opacity:1;transform:translateX(-50%) rotate(-8deg) scale(1)}90%,100%{opacity:0}}
+
+/* screens */
+.screens{display:flex;gap:20px;overflow-x:auto;scroll-snap-type:x mandatory;padding:6px 6px 22px;margin:0 -6px}
+.screens figure{margin:0;flex:0 0 auto;width:min(270px,70vw);scroll-snap-align:start}
+.screens img{display:block;width:100%;height:auto;border:2px solid var(--ink);box-shadow:6px 6px 0 var(--ink);background:var(--paper-2)}
+
+/* prints */
+.prints-band{background:var(--ink);color:var(--paper)}
+.prints-band .kicker{color:var(--home)}
+.prints-band a{color:var(--paper)}
+.prints{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}
+.prints figure{margin:0;display:flex;flex-direction:column;gap:8px}
+.prints canvas{display:block;width:100%;aspect-ratio:1;border:2px solid var(--paper);background:var(--paper-2)}
+.prints figcaption{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;color:#C9C3B8}
+.prints figcaption b{color:var(--paper)}
+@media (max-width:860px){.prints{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* privacy */
+.promise{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;margin:0;padding:0;list-style:none}
+.promise li{border-top:4px solid var(--ink);padding-top:14px;display:flex;flex-direction:column;gap:6px}
+.promise b{font-family:var(--display);font-weight:400;font-size:22px;line-height:1.05}
+.promise span{font-size:15px;color:var(--muted)}
+@media (max-width:860px){.promise{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* final cta */
+.final{text-align:center;padding-block:96px}
+.final h2{font-size:clamp(44px,7vw,92px);line-height:.92;margin:16px auto 28px}
+.final .ctas{justify-content:center}
+.final img{width:88px;height:88px;border-radius:20px;box-shadow:6px 6px 0 var(--ink)}
+
+footer{border-top:2px solid var(--ink);padding-block:26px 40px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px 24px;font-family:var(--mono);font-size:12px}
+footer .links{display:flex;flex-wrap:wrap;gap:8px 20px}
+.heart{color:var(--self)}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+  .ink-typed{width:12ch}.ink-dot{background:var(--work);border-color:var(--work)}
+  .hold-ring circle{stroke-dashoffset:110}
+}
 </style>
 </head>
 <body>
-<div class="blob b1" aria-hidden="true"></div><div class="blob b2" aria-hidden="true"></div><div class="blob b3" aria-hidden="true"></div>
-<main>
-  <img class="icon" src="assets/icon.png" alt="Dot &amp; Done app icon">
-  <h1>Dot &amp;<br>Done</h1>
-  <p class="tag">WEIGH YOUR TO-DOS</p>
-  <p class="lede">A to-do list you can feel. Big tasks sink, small ones bounce, and every finished day becomes a print.</p>
-  <ul class="points">
-    <li><i style="background:var(--work)"></i>Tasks pick their ink color from their words</li>
-    <li><i style="background:var(--home)"></i>Hold a dot to complete it. POP!</li>
-    <li><i style="background:var(--self)"></i>Every day you clear becomes a riso print</li>
-    <li><i style="background:var(--errands)"></i>No account, no ads, no tracking</li>
-  </ul>
-  <p class="soon">COMING SOON TO GOOGLE PLAY</p>
+
+<div class="wrap">
+  <nav aria-label="Main">
+    <a class="brand" href="#top"><img src="assets/icon.png" alt="">DOT &amp; DONE</a>
+    <div class="navlinks">
+      <a class="hide-sm" href="#how">How it works</a>
+      <a class="hide-sm" href="#prints">Prints</a>
+      <a href="privacy/">Privacy</a>
+    </div>
+  </nav>
+
+  <header class="hero" id="top">
+    <div>
+      <p class="kicker">A to-do list you can feel</p>
+      <h1>Dot &amp;<br>Done</h1>
+      <p class="sub">Weigh your to-dos.</p>
+      <p class="lede">Every task is a dot of ink. Big tasks sink to the bottom of the pile, small ones bounce on top, and every day you clear becomes a print.</p>
+      <div class="ctas">
+        <span class="btn primary" role="note" aria-label="Coming soon to Google Play">
+          <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4 2.5v19l10.2-9.5L4 2.5zm11.6 8.2L6.7 2.1l11.1 6.3-2.2 2.3zm0 2.6 2.2 2.3-11.1 6.3 8.9-8.6zm5.3-1.3c0 .5-.3 1-.8 1.3l-2.4 1.4-2.4-2.7 2.4-2.7 2.4 1.4c.5.3.8.8.8 1.3z"/></svg>
+          GOOGLE PLAY <small>· coming soon</small>
+        </span>
+        <a class="btn" href="#how">How it works ↓</a>
+      </div>
+      <p class="badge">Free · No account · No ads · Works offline</p>
+    </div>
+
+    <div class="demo" id="demo" aria-label="A live demo of the pile. Tap a dot to complete it, or add another task.">
+      <p class="count" id="count" aria-hidden="true">0</p>
+      <canvas id="pile"></canvas>
+      <span class="hint">TRY IT · TAP A DOT</span>
+      <button class="add" id="add" type="button">+ DROP A TASK</button>
+      <span class="pop" id="pop" aria-hidden="true">POP!</span>
+      <p class="sr" id="live" aria-live="polite" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)"></p>
+    </div>
+  </header>
+</div>
+
+<hr class="rule">
+
+<section class="band" id="how">
+  <div class="wrap">
+    <div class="band-head">
+      <p class="kicker">How it works</p>
+      <h2>Three things to know.</h2>
+      <p>No setup, no account, nothing to configure. Type a task and drop it.</p>
+    </div>
+    <div class="steps">
+      <article class="step">
+        <div class="ill" aria-hidden="true"><span class="wd wd-h"></span><span class="wd wd-m"></span><span class="wd wd-l"></span><span class="floor"></span></div>
+        <span class="num">01 · DROP IT</span>
+        <h3>Tasks have weight.</h3>
+        <p>Light, medium or heavy. Heavy tasks land hard and sink to the bottom, so you can see what's weighing on your day.</p>
+      </article>
+      <article class="step">
+        <div class="ill" aria-hidden="true"><span class="ink-dot">SEND<br>INVOICE</span><span class="ink-input"><span class="ink-typed">SEND INVOICE</span></span><span class="ink-sw"><i style="background:var(--work)"></i><i style="background:var(--home)"></i><i style="background:var(--self)"></i><i style="background:var(--errands)"></i></span></div>
+        <span class="num">02 · INK IT</span>
+        <h3>It picks the ink.</h3>
+        <p>Work, home, self or errands: each task takes its color from its words. Switch it once and the app remembers.</p>
+      </article>
+      <article class="step">
+        <div class="ill" aria-hidden="true"><svg class="hold-ring" viewBox="0 0 140 140"><circle cx="70" cy="70" r="63"></circle></svg><span class="hold-dot">CALL<br>MOM</span><span class="hold-pop">POP!</span></div>
+        <span class="num">03 · DONE</span>
+        <h3>Hold to complete.</h3>
+        <p>Press and hold a dot until the ring closes. POP. Your phone gives a little thud, and the pile shifts down.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<section class="band" aria-labelledby="screensTitle">
+  <div class="wrap">
+    <div class="band-head">
+      <p class="kicker">Inside the app</p>
+      <h2 id="screensTitle">Calm, tactile, a little bit loud.</h2>
+    </div>
+    <div class="screens" tabindex="0" aria-label="App screenshots, scroll sideways">
+      <figure><img src="assets/screens/1-weight.jpg" width="540" height="960" loading="lazy" alt="The pile: big tasks at the bottom, small ones on top, with a big count of tasks left."></figure>
+      <figure><img src="assets/screens/2-auto-ink.jpg" width="540" height="960" loading="lazy" alt="Typing 'Send invoice to the studio' and the dot inks itself blue for work."></figure>
+      <figure><img src="assets/screens/3-detail.jpg" width="540" height="960" loading="lazy" alt="A task's detail screen with its ink, weight and how long it has been in the pile."></figure>
+      <figure><img src="assets/screens/4-complete.jpg" width="540" height="960" loading="lazy" alt="Completing a task: a POP stamp and an ink splatter."></figure>
+      <figure><img src="assets/screens/5-prints.jpg" width="540" height="960" loading="lazy" alt="A grid of daily prints made from completed tasks."></figure>
+      <figure><img src="assets/screens/6-private.jpg" width="540" height="960" loading="lazy" alt="The pile cleared, showing today's print with a Share print button."></figure>
+    </div>
+  </div>
+</section>
+
+<section class="band prints-band" id="prints">
+  <div class="wrap">
+    <div class="band-head">
+      <p class="kicker">Your day as a print</p>
+      <h2>Clear the pile. Keep the print.</h2>
+      <p>Everything you complete becomes a circle of ink in that day's print. Big tasks print big. Share it, or just enjoy a week that looks like this.</p>
+    </div>
+    <div class="prints" id="printGrid"></div>
+  </div>
+</section>
+
+<section class="band" aria-labelledby="privTitle">
+  <div class="wrap">
+    <div class="band-head">
+      <p class="kicker">Private by design</p>
+      <h2 id="privTitle">Your tasks never leave your phone.</h2>
+    </div>
+    <ul class="promise">
+      <li><b>No account.</b><span>Open it and start dropping tasks.</span></li>
+      <li><b>No ads.</b><span>Nothing between you and your pile.</span></li>
+      <li><b>No tracking.</b><span>No analytics, no third-party SDKs.</span></li>
+      <li><b>Works offline.</b><span>Everything is stored on the device.</span></li>
+    </ul>
+    <p style="margin-top:28px"><a href="privacy/">Read the privacy policy</a></p>
+  </div>
+</section>
+
+<hr class="rule">
+
+<section class="final">
+  <div class="wrap">
+    <img src="assets/icon.png" alt="Dot &amp; Done app icon">
+    <h2>Big tasks sink.<br>Small ones bounce.</h2>
+    <div class="ctas">
+      <span class="btn primary" role="note">GOOGLE PLAY <small>· coming soon</small></span>
+    </div>
+    <p class="badge">iPhone version to follow.</p>
+  </div>
+</section>
+
+<div class="wrap">
   <footer>
-    <span>Made with ♥ and a lot of caffeine by Bhargavi Sundar</span>
-    <a href="privacy/">Privacy policy</a>
+    <span>Made with <span class="heart" aria-hidden="true">♥</span><span style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">love</span> and a lot of caffeine by Bhargavi Sundar</span>
+    <span class="links"><a href="privacy/">Privacy</a><a href="https://github.com/Bhargs/dotanddone/issues">Contact</a></span>
   </footer>
-</main>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+<script>
+(function(){
+'use strict';
+const INK={work:'#6C93FF',home:'#FFD23F',self:'#FF6FA0',errands:'#3FD6A0'};
+const KEYS=Object.keys(INK);
+const R={light:24,medium:34,heavy:50};
+const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+function hash(s){let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619);}return h>>>0;}
+function rng(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+
+/* ---------- prints (drawn the same way as in the app) ---------- */
+function drawPrint(cv,dots,seed){
+  const px=cv.clientWidth||200, d=Math.min(window.devicePixelRatio||1,2);
+  cv.width=Math.round(px*d); cv.height=Math.round(px*d);
+  const c=cv.getContext('2d'); c.setTransform(d,0,0,d,0,0);
+  c.fillStyle='#FBF8F2'; c.fillRect(0,0,px,px);
+  const r0=rng(hash(seed)); const list=dots.slice().sort((a,b)=>b.w-a.w);
+  const base=Math.sqrt(px*px*0.5/list.length/Math.PI); const placed=[]; const m=px*0.07;
+  for(const dot of list){
+    const r=clamp(base*[.62,.92,1.3][dot.w]*(0.9+r0()*0.2),px*0.03,px*0.24); let best=null;
+    for(let k=0;k<36;k++){ const x=m+r+r0()*Math.max(1,px-2*(m+r)), y=m+r+r0()*Math.max(1,px-2*(m+r)); let ov=0; for(const p of placed) ov+=Math.max(0,p.r+r-Math.hypot(p.x-x,p.y-y)); const sc=ov+Math.hypot(x-px/2,y-px/2)*0.12; if(!best||sc<best.sc) best={x,y,sc}; }
+    placed.push({x:best.x,y:best.y,r,ink:dot.ink});
+  }
+  c.globalCompositeOperation='multiply';
+  for(const p of placed){ c.fillStyle=INK[p.ink]; c.beginPath(); c.arc(p.x,p.y,p.r,0,Math.PI*2); c.fill(); }
+}
+const printGrid=document.getElementById('printGrid');
+const DAYS=['MON','TUE','WED','THU','FRI','SAT','SUN','MON'];
+const printData=['w2h1s0e0w1s1h0w1e0s0h1w0e1s2','w2w2h1e1s0s0h0','h2h1s1s0e0e0w1w0h0s0','w2w1w1e2s1h0h0s0','s2h1h1e0w1w0e1','w1h0s0e0w2s1h1e0w0','h2w2s1e1s0w0h0e0s1w1h1','e2w1s1h1w0s0'];
+const L={w:'work',h:'home',s:'self',e:'errands'};
+printData.forEach((str,i)=>{
+  const dots=[]; for(let k=0;k<str.length;k+=2) dots.push({ink:L[str[k]],w:+str[k+1]});
+  const f=document.createElement('figure'); const cv=document.createElement('canvas');
+  cv.setAttribute('role','img'); cv.setAttribute('aria-label','A print of '+dots.length+' completed tasks');
+  const cap=document.createElement('figcaption'); const b=document.createElement('b'); b.textContent='No. '+String(40+i).padStart(3,'0'); const s=document.createElement('span'); s.textContent=DAYS[i]+' · '+dots.length+' DONE';
+  cap.append(b,s); f.append(cv,cap); printGrid.appendChild(f);
+  f._draw=()=>drawPrint(cv,dots,'print'+i);
+});
+function drawPrints(){ [...printGrid.children].forEach(f=>f._draw()); }
+drawPrints();
+let rt; window.addEventListener('resize',()=>{ clearTimeout(rt); rt=setTimeout(drawPrints,150); });
+
+/* ---------- live pile demo ---------- */
+if(!window.Matter) return;
+const {Engine,Bodies,Body,Composite,Query,Constraint}=Matter;
+const demo=document.getElementById('demo'), canvas=document.getElementById('pile'), ctx=canvas.getContext('2d');
+const countEl=document.getElementById('count'), popEl=document.getElementById('pop'), live=document.getElementById('live');
+const engine=Engine.create(); engine.gravity.y=1.1; const world=engine.world;
+let W=0,H=0,FLOOR=0,dpr=1,scale=1; const walls={}; let particles=[]; let drag=null;
+const SAMPLE=[['Q4 deck','work','heavy'],['Portfolio case study','work','heavy'],['Groceries','home','medium'],['Laundry','home','medium'],['Gym','self','medium'],['Call mom','self','light'],['Book dentist','errands','light'],['Pay electric bill','errands','light'],['Reply to recruiter','work','medium'],['Water plants','home','light'],['Read 20 pages','self','light'],['Renew passport','errands','medium'],['Send invoice','work','medium'],['Clean the kitchen','home','heavy'],['Yoga','self','light'],['Return parcel','errands','light']];
+let next=0, uid=0;
+function resize(){
+  const r=demo.getBoundingClientRect(); const old=FLOOR;
+  W=r.width; H=r.height; dpr=Math.min(window.devicePixelRatio||1,2);
+  canvas.width=Math.round(W*dpr); canvas.height=Math.round(H*dpr); FLOOR=H-22; scale=clamp(W/430,.7,1.15);
+  if(!walls.floor){ walls.floor=Bodies.rectangle(W/2,FLOOR+100,W+800,200,{isStatic:true,friction:.6}); walls.left=Bodies.rectangle(-100,FLOOR-2000,200,4400,{isStatic:true}); walls.right=Bodies.rectangle(W+100,FLOOR-2000,200,4400,{isStatic:true}); Composite.add(world,[walls.floor,walls.left,walls.right]); }
+  else { Body.setPosition(walls.floor,{x:W/2,y:FLOOR+100}); Body.setPosition(walls.right,{x:W+100,y:FLOOR-2000}); const dy=FLOOR-old; for(const b of dots()) Body.translate(b,{x:0,y:dy}); }
+}
+const dots=()=>Composite.allBodies(world).filter(b=>b.task);
+function drop(t,i){
+  const r=R[t[2]]*scale*(1+clamp((t[0].length-14)*.011,0,.2));
+  const b=Bodies.circle(r+4+Math.random()*Math.max(1,W-2*r-8),-r-20-(i||0)*70,r,{restitution:.25,friction:.32,frictionAir:.012,density:{light:.0012,medium:.002,heavy:.0035}[t[2]]});
+  b.task={text:t[0],ink:t[1],w:t[2],id:++uid,second:KEYS.filter(k=>k!==t[1])[uid%3]}; Composite.add(world,b); updateCount();
+}
+function updateCount(){ countEl.textContent=dots().length; }
+function addNext(i){ drop(SAMPLE[next%SAMPLE.length],i); next++; }
+function fitLines(text,r){
+  const words=text.toUpperCase().split(/\s+/); let fs=clamp(Math.round(r*.3),9,15);
+  for(;fs>=8;fs--){ ctx.font='700 '+fs+'px Archivo, Arial, sans-serif'; const lh=fs*1.08; const n=Math.max(1,Math.min(4,Math.floor(2*r*.8/lh)));
+    for(let k=1;k<=n;k++){ const lines=[]; let wi=0, ok=true;
+      for(let i=0;i<k;i++){ const y=Math.abs((i-(k-1)/2)*lh)+lh/2; const w=y<r?2*Math.sqrt(r*r-y*y)*.84:0; let cur='';
+        while(wi<words.length){ const t=cur?cur+' '+words[wi]:words[wi]; if(ctx.measureText(t).width<=w){cur=t;wi++;} else break; }
+        if(!cur){ok=false;break;} lines.push(cur); }
+      if(ok&&wi===words.length) return {fs,lh,lines}; } }
+  return null;
+}
+function draw(){
+  ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,W,H);
+  ctx.fillStyle='#141414'; ctx.fillRect(0,FLOOR,W,3);
+  ctx.globalAlpha=.45; for(let y=FLOOR+8;y<H;y+=6) for(let x=3;x<W;x+=6){ ctx.beginPath(); ctx.arc(x,y,1.2,0,7); ctx.fill(); } ctx.globalAlpha=1;
+  const all=dots();
+  ctx.globalCompositeOperation='multiply';
+  for(const b of all){ const r=b.circleRadius, o=2.5+r*.065; ctx.fillStyle=INK[b.task.second]; ctx.beginPath(); ctx.arc(b.position.x+o,b.position.y+o*.75,r,0,7); ctx.fill(); }
+  ctx.globalCompositeOperation='source-over';
+  for(const b of all){ ctx.fillStyle=INK[b.task.ink]; ctx.beginPath(); ctx.arc(b.position.x,b.position.y,b.circleRadius,0,7); ctx.fill(); }
+  ctx.globalCompositeOperation='multiply';
+  for(const p of particles){ ctx.globalAlpha=Math.max(0,p.life); ctx.fillStyle=p.c; ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,7); ctx.fill(); }
+  ctx.globalAlpha=1; ctx.globalCompositeOperation='source-over';
+  ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillStyle='#141414';
+  for(const b of all){ const r=b.circleRadius; if(r<18) continue; if(!b.label||b.labelR!==Math.round(r)){ b.label=fitLines(b.task.text,r); b.labelR=Math.round(r); }
+    const L2=b.label; if(!L2) continue; ctx.font='700 '+L2.fs+'px Archivo, Arial, sans-serif'; let y=b.position.y-(L2.lines.length-1)*L2.lh/2; for(const l of L2.lines){ ctx.fillText(l,b.position.x,y); y+=L2.lh; } }
+}
+let last=performance.now();
+function loop(now){ const dt=Math.min(33,now-last); last=now; if(drag){ drag.c.pointA.x=drag.p.x; drag.c.pointA.y=drag.p.y; }
+  Engine.update(engine,dt); for(const p of particles){ p.x+=p.vx; p.y+=p.vy; p.vy+=.28; p.life-=.022; } particles=particles.filter(p=>p.life>0); draw(); requestAnimationFrame(loop); }
+function complete(b){
+  const {x,y}=b.position, r=b.circleRadius, t=b.task; Composite.remove(world,b);
+  if(!reduced){ for(let i=0;i<14+Math.round(r/5);i++){ const a=Math.random()*Math.PI*2, s=2+Math.random()*6*(r/40); particles.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s-2.5,r:2+Math.random()*r*.22,c:i%3?INK[t.ink]:INK[t.second],life:1}); }
+    popEl.style.left=clamp(x,60,W-60)+'px'; popEl.style.top=clamp(y-30,40,H-60)+'px'; popEl.classList.remove('go'); void popEl.offsetWidth; popEl.classList.add('go');
+    countEl.classList.remove('bump'); void countEl.offsetWidth; countEl.classList.add('bump'); }
+  updateCount(); live.textContent='Completed '+t.text+'. '+dots().length+' left.';
+  if(dots().length===0) setTimeout(()=>{ for(let i=0;i<6;i++) addNext(i); },900);
+}
+function pt(e){ const r=canvas.getBoundingClientRect(); return {x:e.clientX-r.left,y:e.clientY-r.top}; }
+canvas.addEventListener('pointerdown',e=>{ const p=pt(e); const hit=Query.point(dots(),p)[0]; if(!hit) return; e.preventDefault(); canvas.setPointerCapture(e.pointerId);
+  const c=Constraint.create({pointA:{...p},bodyB:hit,pointB:{x:p.x-hit.position.x,y:p.y-hit.position.y},stiffness:.2,damping:.1,length:0}); Composite.add(world,c);
+  drag={id:e.pointerId,body:hit,start:p,p:{...p},t:performance.now(),moved:false,c}; });
+canvas.addEventListener('pointermove',e=>{ const p=pt(e); if(drag&&e.pointerId===drag.id){ drag.p={x:clamp(p.x,0,W),y:Math.min(p.y,FLOOR-4)}; if(Math.hypot(p.x-drag.start.x,p.y-drag.start.y)>8) drag.moved=true; return; }
+  canvas.style.cursor=Query.point(dots(),p).length?'pointer':'default'; });
+function end(e,cancel){ if(!drag||e.pointerId!==drag.id) return; Composite.remove(world,drag.c); const tap=!cancel&&!drag.moved&&performance.now()-drag.t<450; const b=drag.body; drag=null; if(tap) complete(b); }
+canvas.addEventListener('pointerup',e=>end(e,false)); canvas.addEventListener('pointercancel',e=>end(e,true));
+document.getElementById('add').addEventListener('click',()=>{ if(dots().length<22) addNext(0); });
+resize(); new ResizeObserver(resize).observe(demo);
+for(let i=0;i<9;i++) addNext(i);
+if(reduced){ for(let i=0;i<400;i++) Engine.update(engine,16); }
+requestAnimationFrame(t=>{ last=t; loop(t); });
+})();
+</script>
 </body>
 </html>
