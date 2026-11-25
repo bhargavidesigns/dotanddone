@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dot &amp; Done · Weigh your to-dos</title>
+<meta name="description" content="A to-do list you can feel. Big tasks sink, small ones bounce, and every finished day becomes a print.">
+<link rel="icon" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap">
+<style>
+  :root{--paper:#F2EDE3;--ink:#141414;--muted:#5E584F;--work:#6C93FF;--home:#FFD23F;--self:#FF6FA0;--errands:#3FD6A0}
+  *{box-sizing:border-box}
+  html,body{min-height:100%}
+  body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.6 Archivo,"Helvetica Neue",Arial,sans-serif;overflow-x:hidden}
+  main{position:relative;max-width:760px;margin:0 auto;padding:48px 20px 64px;min-height:100vh;display:flex;flex-direction:column}
+  .icon{width:96px;height:96px;border-radius:22px;box-shadow:6px 6px 0 var(--ink)}
+  h1{font-family:"Archivo Black","Arial Black",sans-serif;font-weight:400;font-size:clamp(56px,15vw,120px);line-height:.88;letter-spacing:-.02em;margin:36px 0 18px}
+  .tag{font-family:"Space Mono",monospace;font-weight:700;font-size:15px;letter-spacing:.08em;margin:0 0 24px}
+  .lede{font-size:20px;max-width:30ch;margin:0 0 28px}
+  .points{list-style:none;margin:0 0 36px;padding:0;display:flex;flex-direction:column;gap:10px;font-size:17px}
+  .points li{display:flex;gap:12px;align-items:center}
+  .points i{width:16px;height:16px;border-radius:50%;flex-shrink:0;display:block}
+  .soon{align-self:flex-start;font-family:"Space Mono",monospace;font-weight:700;font-size:13px;letter-spacing:.06em;background:var(--ink);color:var(--paper);padding:10px 14px;transform:rotate(-2deg)}
+  footer{margin-top:auto;padding-top:48px;display:flex;flex-wrap:wrap;gap:8px 20px;font-family:"Space Mono",monospace;font-size:12px;color:var(--muted)}
+  footer a{color:var(--ink);text-decoration-thickness:2px;text-underline-offset:3px}
+  .blob{position:fixed;border-radius:50%;mix-blend-mode:multiply;pointer-events:none;z-index:-1}
+  .b1{width:46vmax;height:46vmax;right:-14vmax;bottom:-16vmax;background:var(--work)}
+  .b2{width:22vmax;height:22vmax;right:20vmax;bottom:-6vmax;background:var(--home)}
+  .b3{width:12vmax;height:12vmax;right:6vmax;top:10vh;background:var(--self)}
+  @media (max-width:600px){.b1{opacity:.55}.b2{opacity:.6}}
+</style>
+</head>
+<body>
+<div class="blob b1" aria-hidden="true"></div><div class="blob b2" aria-hidden="true"></div><div class="blob b3" aria-hidden="true"></div>
+<main>
+  <img class="icon" src="assets/icon.png" alt="Dot &amp; Done app icon">
+  <h1>Dot &amp;<br>Done</h1>
+  <p class="tag">WEIGH YOUR TO-DOS</p>
+  <p class="lede">A to-do list you can feel. Big tasks sink, small ones bounce, and every finished day becomes a print.</p>
+  <ul class="points">
+    <li><i style="background:var(--work)"></i>Tasks pick their ink color from their words</li>
+    <li><i style="background:var(--home)"></i>Hold a dot to complete it. POP!</li>
+    <li><i style="background:var(--self)"></i>Every day you clear becomes a riso print</li>
+    <li><i style="background:var(--errands)"></i>No account, no ads, no tracking</li>
+  </ul>
+  <p class="soon">COMING SOON TO GOOGLE PLAY</p>
+  <footer>
+    <span>Made with ♥ and a lot of caffeine by Bhargavi Sundar</span>
+    <a href="privacy/">Privacy policy</a>
+  </footer>
+</main>
+</body>
+</html>
